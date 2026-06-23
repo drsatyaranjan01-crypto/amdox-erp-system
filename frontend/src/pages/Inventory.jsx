@@ -5,19 +5,29 @@ function Inventory() {
     return (
       JSON.parse(localStorage.getItem("inventory")) || [
         {
-          id: 1,
-          product: "Laptop",
-          stock: 25,
+          id: "PRD001",
+          product: "Dell Latitude Laptop",
+          stock: 15,
         },
         {
-          id: 2,
-          product: "Monitor",
+          id: "PRD002",
+          product: "HP Desktop",
+          stock: 10,
+        },
+        {
+          id: "PRD003",
+          product: "Wireless Mouse",
+          stock: 50,
+        },
+        {
+          id: "PRD004",
+          product: "Mechanical Keyboard",
           stock: 40,
         },
         {
-          id: 3,
-          product: "Keyboard",
-          stock: 100,
+          id: "PRD005",
+          product: "Dell Monitor",
+          stock: 20,
         },
       ]
     );
@@ -29,6 +39,11 @@ function Inventory() {
   const [stock, setStock] = useState("");
 
   const [search, setSearch] = useState("");
+  const [productCounter, setProductCounter] = useState(() => {
+  return Number(
+    localStorage.getItem("productCounter")
+  ) || 6;
+});
 
   const [editId, setEditId] = useState(null);
 
@@ -44,6 +59,12 @@ function Inventory() {
       JSON.stringify(products)
     );
   }, [products]);
+  useEffect(() => {
+  localStorage.setItem(
+    "productCounter",
+    productCounter
+  );
+}, [productCounter]);
 
   const addProduct = () => {
     if (!productName || !stock) {
@@ -51,16 +72,23 @@ function Inventory() {
       return;
     }
 
-    const newProduct = {
-      id: Date.now(),
-      product: productName,
-      stock,
-    };
+    const nextId = `PRD${String(
+  productCounter
+).padStart(3, "0")}`;
+
+  const newProduct = {
+    id: nextId,
+    product: productName,
+    stock,
+  };
 
     setProducts([
       ...products,
       newProduct,
     ]);
+    setProductCounter(
+  productCounter + 1
+);
 
     setProductName("");
     setStock("");
