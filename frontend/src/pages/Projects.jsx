@@ -5,18 +5,37 @@ function Projects() {
     return (
       JSON.parse(localStorage.getItem("projects")) || [
         {
-          id: 1,
-          name: "ERP System",
-          status: "Ongoing",
-          priority: "High",
-          progress: 60,
-        },
+        id: "PROJ001",
+        name: "ERP Management System",
+        status: "Completed",
+        priority: "High",
+        progress: 100,
+      },
+      {
+        id: "PROJ002",
+        name: "Weather Forecast App",
+        status: "Completed",
+        priority: "Medium",
+        progress: 100,
+      },
+      {
+        id: "PROJ003",
+        name: "Portfolio Website",
+        status: "Testing",
+        priority: "Medium",
+        progress: 90,
+      },
       ]
     );
   });
 
   const [projectName, setProjectName] =
     useState("");
+    const [projectCounter, setProjectCounter] = useState(() => {
+  return Number(
+    localStorage.getItem("projectCounter")
+  ) || 4;
+});
 
   const [status, setStatus] =
     useState("Ongoing");
@@ -39,6 +58,12 @@ function Projects() {
       JSON.stringify(projects)
     );
   }, [projects]);
+  useEffect(() => {
+  localStorage.setItem(
+    "projectCounter",
+    projectCounter
+  );
+}, [projectCounter]);
 
   const addProject = () => {
     if (!projectName) {
@@ -46,18 +71,25 @@ function Projects() {
       return;
     }
 
-    const newProject = {
-      id: Date.now(),
-      name: projectName,
-      status,
-      priority,
-      progress,
-    };
+    const nextId = `PROJ${String(
+  projectCounter
+).padStart(3, "0")}`;
+
+const newProject = {
+  id: nextId,
+  name: projectName,
+  status,
+  priority,
+  progress,
+};
 
     setProjects([
       ...projects,
       newProject,
     ]);
+    setProjectCounter(
+  projectCounter + 1
+);
 
     setProjectName("");
     setStatus("Ongoing");
@@ -141,15 +173,10 @@ function Projects() {
             }
             className="p-3 rounded bg-slate-700"
           >
-            <option>
-              Ongoing
-            </option>
-            <option>
-              Completed
-            </option>
-            <option>
-              Pending
-            </option>
+          <option>Planning</option>
+          <option>In Progress</option>
+          <option>Testing</option>
+          <option>Completed</option>
           </select>
 
           <select
