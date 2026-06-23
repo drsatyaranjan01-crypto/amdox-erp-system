@@ -5,22 +5,34 @@ function Employees() {
     return (
       JSON.parse(localStorage.getItem("employees")) || [
         {
-          id: 1,
-          name: "Rahul Sharma",
-          department: "HR",
-          salary: 35000,
+          id: "EMP001",
+          name: "Satya Ranjan Pattanayak",
+          department: "Project Manager",
+          salary: 150000,
         },
         {
-          id: 2,
-          name: "Priya Das",
-          department: "IT",
+          id: "EMP002",
+          name: "Ananyaa T",
+          department: "Frontend Developer",
+          salary: 60000,
+        },
+        {
+          id: "EMP003",
+          name: "Subhaharini P",
+          department: "Backend Developer",
+          salary: 65000,
+        },
+        {
+          id: "EMP004",
+          name: "Pranjal Patel",
+          department: "UI/UX Designer",
           salary: 55000,
         },
         {
-          id: 3,
-          name: "Amit Kumar",
-          department: "Finance",
-          salary: 45000,
+          id: "EMP005",
+          name: "Darti Vasani",
+          department: "QA Tester",
+          salary: 50000,
         },
       ]
     );
@@ -30,6 +42,11 @@ function Employees() {
   const [department, setDepartment] = useState("");
   const [salary, setSalary] = useState("");
   const [search, setSearch] = useState("");
+  const [employeeCounter, setEmployeeCounter] = useState(() => {
+    return Number(
+      localStorage.getItem("employeeCounter")
+    ) || 6;
+  });
 
   // Edit States
   const [editId, setEditId] = useState(null);
@@ -45,6 +62,12 @@ function Employees() {
       JSON.stringify(employees)
     );
   }, [employees]);
+  useEffect(() => {
+  localStorage.setItem(
+    "employeeCounter",
+    employeeCounter
+  );
+}, [employeeCounter]);
 
   const addEmployee = () => {
     if (!name || !department || !salary) {
@@ -52,17 +75,24 @@ function Employees() {
       return;
     }
 
-    const newEmployee = {
-      id: Date.now(),
-      name,
-      department,
-      salary,
-    };
+    const nextId = `EMP${String(
+  employeeCounter
+).padStart(3, "0")}`;
+
+const newEmployee = {
+  id: nextId,
+  name,
+  department,
+  salary,
+};
 
     setEmployees([
       ...employees,
       newEmployee,
     ]);
+    setEmployeeCounter(
+  employeeCounter + 1
+);
 
     setName("");
     setDepartment("");
