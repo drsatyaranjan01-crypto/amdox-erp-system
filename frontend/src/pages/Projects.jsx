@@ -248,13 +248,16 @@ const newProject = {
               <h3 className="text-2xl font-bold mb-3">
                 {project.name}
               </h3>
+              <p className="text-gray-400 mb-2">
+                ID: {project.id}
+              </p>
 
               <p>
                 Status:
                 {" "}
                 {editId ===
                 project.id ? (
-                  <select
+                  <select>
                     value={
                       project.status
                     }
@@ -269,16 +272,11 @@ const newProject = {
                       )
                     }
                     className="ml-2 bg-slate-700 rounded"
-                  >
-                    <option>
-                      Pending
-                    </option>
-                    <option>
-                      Ongoing
-                    </option>
-                    <option>
-                      Completed
-                    </option>
+                  
+                    <option>Planning</option>
+                    <option>In Progress</option>
+                    <option>Testing</option>
+                    <option>Completed</option>
                   </select>
                 ) : (
                   project.status
